@@ -20,8 +20,8 @@ jobs:
         run: pip install semgrep
 
       - name: Rodar Semgrep com regra customizada
-        run: semgrep scan --config semgrep-rules/no-print.yml --json --output semgrep-results.json || true
-
+        run: semgrep scan --config .github/semgrep-rules/no-print.yml --json --output semgrep-results.json || true
+        
       - name: Exibir resultado do Semgrep
         run: cat semgrep-results.json
 
