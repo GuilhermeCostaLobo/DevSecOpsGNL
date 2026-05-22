@@ -1,51 +1,30 @@
-name: Security Pipeline - SAST and SCA
+name: SAST
 
 on:
-  push:
-    branches:
-      - main
-  pull_request:
   workflow_dispatch:
 
 jobs:
-  sast-semgrep:
-    name: SAST - Semgrep
+  semgrep:
+    name: semgrep
     runs-on: ubuntu-latest
 
-    env:
-      SEMGREP_APP_TOKEN: ${{ secrets.SEMGREP_APP_TOKEN }}
+    container:
+      image: semgrep/semgrep
 
-    steps:
-      - name: Checkout do repositório
-        uses: actions/checkout@v4
+    steps: 
+      - uses: actions/checkout@v6
 
-      - name: Instalar Semgrep
-        run: pip install semgrep
+      - run: semgrep ci --config semgrep-rules/no-print.yaml
+        env:
+          SEMGREP_APP_TOKEN: ${{ secrets.SEMGREP_APP_TOKEN }}
 
-      - name: Rodar Semgrep na plataforma
-        run: semgrep ci || true
-
-      - name: Rodar Semgrep com regra customizada
-        run: semgrep scan --config semgrep-rules/no-print.yml --json --output semgrep-results.json || true
-
-      - name: Exibir resultado do Semgrep
-        run: cat semgrep-results.json
-
-      - name: Salvar relatório do Semgrep
-        uses: actions/upload-artifact@v4
-        with:
-          name: semgrep-results
-          path: semgrep-results.json
-
-  sca-fossa:
-    name: SCA - FOSSA
+  fossa:
+    name: fossa
     runs-on: ubuntu-latest
+    needs: semgrep
 
     steps:
-      - name: Checkout do repositório
-        uses: actions/checkout@v4
-
-      - name: Rodar FOSSA
-        uses: fossas/fossa-action@main
+      - uses: actions/checkout@v4
+      - uses: fossas/fossa-action@main
         with:
           api-key: ${{ secrets.FOSSA_API_KEY }}
