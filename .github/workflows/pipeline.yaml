@@ -14,7 +14,7 @@ jobs:
     steps: 
       - uses: actions/checkout@v6
 
-      - run: semgrep ci --config semgrep-rules/no-print.yaml
+      - run: semgrep logout & semgrep ci --config semgrep-rules/no-print.yaml
         env:
           SEMGREP_APP_TOKEN: ${{ secrets.SEMGREP_APP_TOKEN }}
 
