@@ -22,6 +22,9 @@ jobs:
       - name: Instalar Semgrep
         run: pip install semgrep
 
+      - name: Rodar Semgrep na plataforma
+        run: semgrep ci || true
+
       - name: Rodar Semgrep com regra customizada
         run: semgrep scan --config semgrep-rules/no-print.yml --json --output semgrep-results.json || true
 
