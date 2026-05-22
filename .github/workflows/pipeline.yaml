@@ -1,25 +1,8 @@
 name: Security Pipeline - SAST and SCA
 
 on:
-  push:
-    branches:
-      - main
-  pull_request:
   workflow_dispatch:
-
-jobs:
-  sast-semgrep:
-    name: SAST - Semgrep
-    runs-on: ubuntu-latest
-    name: Security Pipeline - SAST and SCA
-
-on:
-  push:
-    branches:
-      - main
-  pull_request:
-  workflow_dispatch:
-
+  
 jobs:
   semgrep:
     name: semgrep
